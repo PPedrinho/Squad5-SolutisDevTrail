@@ -8,7 +8,7 @@ public class Venda {
     private String cliente;
     private float valor;
 
-    //construtores
+    //construtoress
     public Venda() {    
 
     }
