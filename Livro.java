@@ -71,22 +71,22 @@ public abstract class Livro {
     @Override
     public String toString(){
         //Caso haja apenas um autor;
-        String autores = "Autor: " +  getAutores() + "\n";
+        String autores = "\tAutor: " +  getAutores() + "\n";
 
         //Caso haja mais de um autor (Autores separados com "," ou ";")
         if(getAutores().split(",").length > 1 || getAutores().split(";").length > 1){
-            autores = "Autores: " + getAutores() + "\n";
+            autores = "\tAutores: " + getAutores() + "\n";
         }
 
-        String preco = "R$" + String.valueOf(getPreco());
+        String preco = "\tR$" + String.valueOf(getPreco());
 
         //Caso o preço não tenha sido informado
         if(getPreco() < 0){
-            preco = "não informado";
+            preco = "\t Preço não informado";
         }
 
-        StringBuilder str = new StringBuilder("Titulo: " + getTitulo() + "\n");
-        str.append(autores).append("Editora: ").append(getEditora()).append("\nPreço: ").append(preco);
+        StringBuilder str = new StringBuilder("\tTitulo: " + getTitulo() + "\n");
+        str.append(autores).append("\tEditora: ").append(getEditora()).append("\n\tPreço: ").append(preco);
 
         return str.toString();
     }
