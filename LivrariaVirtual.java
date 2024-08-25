@@ -106,6 +106,7 @@ public class LivrariaVirtual {
     public void cadastrarLivro(Scanner sc){
         sc = new Scanner(System.in);
         int tipo = 0;
+        limparConsole();
         while (tipo != 1 && tipo != 2 && tipo != 3) {
             try {
                 System.out.println("\nDigite o tipo de livro que deseja cadastrar:");
@@ -116,30 +117,37 @@ public class LivrariaVirtual {
                 tipo = sc.nextInt();
                 break;
             } catch (InputMismatchException e) {
+                limparConsole();
                 System.out.println("Entrada inválida. Tente novamente.");
                 sc.nextLine();
             }
-            if (tipo == 1 && numImpressos == MAX_IMPRESSOS) {
-                System.out.println("Limite de livros impressos atingido. Impossível adicionar mais livros.");
-                return;
-            } else if (tipo == 2 && numEletronicos == MAX_ELETRONICOS) {
-                System.out.println("Limite de livros eletronicos atingido. Impossível adicionar mais livros.");
-                return;
-            } else if (tipo == 3 &&numImpressos == MAX_IMPRESSOS && numEletronicos == MAX_ELETRONICOS){
-                System.out.println("Limite de livros impressos e eletronicos atingido. Impossível adicionar mais livros.");
-                return;
-            } else if (tipo == 3 && numImpressos == MAX_IMPRESSOS){
-                System.out.println("Limite de livros impressos atingido. Impossível adicionar mais livros.");
-                return;
-            } else if (tipo == 3 && numEletronicos == MAX_ELETRONICOS){
-                System.out.println("Limite de livros eletronicos atingido. Impossível adicionar mais livros.");
-                return;
-            }
+        }
+        if (tipo == 1 && numImpressos == MAX_IMPRESSOS) {
+            limparConsole();
+            System.out.println("Limite de livros impressos atingido. Impossível adicionar mais livros.");
+            return;
+        } else if (tipo == 2 && numEletronicos == MAX_ELETRONICOS) {
+            limparConsole();
+            System.out.println("Limite de livros eletronicos atingido. Impossível adicionar mais livros.");
+            return;
+        } else if (tipo == 3 && numImpressos == MAX_IMPRESSOS && numEletronicos == MAX_ELETRONICOS){
+            limparConsole();
+            System.out.println("Limite de livros impressos e eletronicos atingido. Impossível adicionar mais livros.");
+            return;
+        } else if (tipo == 3 && numImpressos == MAX_IMPRESSOS){
+            limparConsole();
+            System.out.println("Limite de livros impressos atingido. Impossível adicionar mais livros.");
+            return;
+        } else if (tipo == 3 && numEletronicos == MAX_ELETRONICOS){
+            limparConsole();
+            System.out.println("Limite de livros eletronicos atingido. Impossível adicionar mais livros.");
+            return;
         }
 
         String titulo, autor, editora;
         float preco;
         sc = new Scanner(System.in);
+        limparConsole();
         while (true){
             try {
                 System.out.println("\nDigite o titulo do livro: ");
@@ -153,7 +161,9 @@ public class LivrariaVirtual {
                 sc.nextLine();
                 break;
             } catch (InputMismatchException e) {
+                limparConsole();
                 System.out.println("Entrada inválida. Tente novamente.");
+                limparScanner(sc);
             }
         }
         
@@ -166,11 +176,13 @@ public class LivrariaVirtual {
                     System.out.println("\nDigite o frete cobrado para entrega do livro:");
                     frete = sc.nextFloat();
                     addImpresso(new Impresso(titulo, autor, editora, preco, frete));
+                    limparConsole();
                     break;
                 } else if (tipo == 2) {
                     System.out.println("\nDigite o tamanho do arquivo (em KB):");
                     tamanho = sc.nextInt();
                     addEletronico(new Eletronico(titulo, autor, editora, preco, tamanho));
+                    limparConsole();
                     break;
                 } else if (tipo == 3) {
                     System.out.println("\nDigite o frete cobrado para entrega do livro:");
@@ -180,15 +192,18 @@ public class LivrariaVirtual {
                     System.out.println(tipo);
                     addImpresso(new Impresso(titulo, autor, editora, preco, frete));
                     addEletronico(new Eletronico(titulo, autor, editora, preco, tamanho));
+                    limparConsole();
                     break;
                 } else {
                     System.out.println("Opcão inválida. Tente novamente.\n");
                 }
             } catch (InputMismatchException e) {
+                limparConsole();
                 System.out.println("Entrada inválida. Tente novamente.");
+                sc.nextLine();
             }
         }
-        
+        System.out.println("\nLivro cadastrado com sucesso!\n");
         
     }
 
@@ -207,13 +222,16 @@ public class LivrariaVirtual {
     public void realizarVenda(Scanner sc){
         sc = new Scanner(System.in);
         if (numVendas == MAX_VENDAS){
+            limparConsole();
             System.out.println("Limite de vendas atingido. Impossível realizar mais vendas.");
             return;
         }
         if (impressosEmEstoque() + this.numEletronicos == 0){
+            limparConsole();
             System.out.println("\nNenhum livro no estoque e/ou cadastrado. Impossível realizar vendas.\n");
             return;
         }
+        limparConsole();
         System.out.println("\nDigite o nome do cliente: ");
         String nomeCliente = sc.nextLine();
         int numLivros;
@@ -230,6 +248,7 @@ public class LivrariaVirtual {
         Venda v = new Venda();
         int indexAtual = 0;
         for (int i = 0; i < numLivros; i++){
+            limparConsole();
             System.out.println("\nDigite o tipo de livro:");
             System.out.println("1. Impresso");
             System.out.println("2. Eletrônico");
@@ -237,8 +256,10 @@ public class LivrariaVirtual {
             int tipo = 0;
             while (tipo != 1 && tipo != 2) {
                 tipo = sc.nextInt();
-                if (tipo != 1 && tipo != 2)
+                if (tipo != 1 && tipo != 2){
+                    limparConsole();
                     System.out.println("Opcão inválida. Tente novamente.\n");
+                }
             }
             if (tipo == 1 && numImpressos == 0) {
                 System.out.println("Nenhum livro impresso cadastrado.");
@@ -251,6 +272,7 @@ public class LivrariaVirtual {
                 System.out.println("Nenhum livro em estoque.");
                 break;
             }
+            limparConsole();
             if (tipo == 1){
                 listarLivrosImpressos();
             } else if (tipo == 2) {
@@ -262,12 +284,15 @@ public class LivrariaVirtual {
                 System.out.print("-> ");
                 indice = sc.nextInt();
                 try {
-                    if (tipo == 1 && impressos[indice - 1].getEstoque() == 0)
+                    if (tipo == 1 && impressos[indice - 1].getEstoque() == 0){
+                        limparConsole();
                         System.out.println("Livro fora de estoque. Tente novamente.\n");
-                    else
+                    } else
                         break;
                 } catch (ArrayIndexOutOfBoundsException e) {
+                    limparConsole();
                     System.out.println("Opcão inválida. Tente novamente.\n");
+                    limparScanner(sc);
                 }
             }
             v.setCliente(nomeCliente);
@@ -280,7 +305,8 @@ public class LivrariaVirtual {
             indexAtual++;
         }
         addVenda(v);
-        
+        limparConsole();
+        System.out.println("Venda realizada com sucesso!\n");
     }
 
     public void listarLivrosEletronicos(){
@@ -308,11 +334,13 @@ public class LivrariaVirtual {
     }
 
     public void listarLivros(){
+        limparConsole();
         listarLivrosImpressos();
         listarLivrosEletronicos();
     }
 
     public void listarVendas(){
+        limparConsole();
         System.out.println("\nVENDAS CADASTRADAS:\n");
         if (numVendas == 0) {
             System.out.println("\tNenhuma venda cadastrada.\n");
@@ -390,6 +418,11 @@ public class LivrariaVirtual {
         }
     }
 
+    public static void limparConsole(){
+        System.out.print("\033[H\033[2J");  
+        System.out.flush(); 
+    }
+
     public static void main(String[] args) {
         LivrariaVirtual livraria = new LivrariaVirtual();
         Scanner sc = new Scanner(System.in);
@@ -416,9 +449,11 @@ public class LivrariaVirtual {
                 } else if (op == 5) {
                     break;
                 } else {
+                    limparConsole();
                     System.out.println("Opcão inválida. Tente novamente.\n");
                 }
             } catch (InputMismatchException e) {
+                limparConsole();
                 System.out.println("Entrada inválida. Tente novamente.\n");
                 sc.nextLine();
             }
