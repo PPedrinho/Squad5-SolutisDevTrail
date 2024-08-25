@@ -1,8 +1,5 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Venda {
-    private ArrayList<Livro> livros;
+    private Livro[] livros;
     private static int numVendas;
     private int numero;
     private String cliente;
@@ -13,18 +10,27 @@ public class Venda {
 
     }
 
-    public Venda(String cliente, ArrayList<Livro> livros, float valor) {
+    public Venda(String cliente, Livro[] livros, float valor) {
         this.numVendas = 0;
         this.numero = ++numVendas;
         this.cliente = cliente;
         this.valor = valor;
-        this.livros = new ArrayList<>(livros);
+        this.livros = new Livro[0];
     }
     
 
     //metodos
     public void addLivro(Livro l, int index) {
-        livros.add(index, l);
+        if (index < 0 || index > livros.length) {
+            throw new IndexOutOfBoundsException("Índice inválido");
+        }
+
+        Livro[] novosLivros = new Livro[livros.length + 1];
+        System.arraycopy(livros, 0, novosLivros, 0, index);
+        novosLivros[index] = l;
+        System.arraycopy(livros, index, novosLivros, index + 1, livros.length - index);
+        this.livros = novosLivros;
+        this.valor += l.getPreco();
     }
 
     public void listarLivros() {
