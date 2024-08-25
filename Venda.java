@@ -1,17 +1,19 @@
+
 public class Venda {
     private Livro[] livros;
-    private static int numVendas;
+    private static int numVendas = 0;
     private int numero;
     private String cliente;
     private float valor;
 
     //construtoress
     public Venda() {    
-
+        this.numero = ++numVendas;
+        this.valor = 0f;
+        this.livros = new Livro[0];
     }
 
     public Venda(String cliente, Livro[] livros, float valor) {
-        this.numVendas = 0;
         this.numero = ++numVendas;
         this.cliente = cliente;
         this.valor = valor;
@@ -31,6 +33,9 @@ public class Venda {
         System.arraycopy(livros, index, novosLivros, index + 1, livros.length - index);
         this.livros = novosLivros;
         this.valor += l.getPreco();
+        if (l instanceof Impresso){
+            this.valor += ((Impresso) l).getFrete();
+        }
     }
 
     public void listarLivros() {
@@ -44,8 +49,8 @@ public class Venda {
         return numVendas;
     }
 
-    public void setNumVendas(int numVendas) {
-        this.numVendas = numVendas;
+    public void setNumVendas(int num) {
+        numVendas = num;
     }
 
     public int getNumero() {
@@ -72,8 +77,17 @@ public class Venda {
         this.valor = valor;
     }
 
+    @Override
+    public String toString() {
+        String stringLivros = "";
+
+        for (Livro livro : livros) {
+            stringLivros += "\n\t\t" + livro.getTitulo();
+        }
+        return "\tLivros:" + stringLivros + "\n\tNúmero=" + numero + "\n\tCliente=" + cliente + "\n\tValor: R$"
+                + valor;
+    }
+
     
-
-
 
 }

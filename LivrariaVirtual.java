@@ -1,9 +1,10 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class LivrariaVirtual {
-    private final int MAX_IMPRESSOS = 50;
-    private final int MAX_ELETRONICOS = 50;
-    private final int MAX_VENDAS = 100;
+    private final int MAX_IMPRESSOS = 2;
+    private final int MAX_ELETRONICOS = 2;
+    private final int MAX_VENDAS = 10;
     private Impresso[] impressos;
     private Eletronico[] eletronicos;
     private Venda[] vendas;
@@ -20,15 +21,6 @@ public class LivrariaVirtual {
         this.numVendas = 0;
     }
 
-    public int impressoExistente(Impresso i) {
-        for (int j = 0; j < numImpressos; j++) {
-            if (impressos[j].equals(i)) {
-                return j;
-            }
-        }
-        return -1;
-    }
-
     public boolean eletronicoIgual(Eletronico e, Eletronico e2) {
         return e2.getTitulo().equals(e.getTitulo()) && e2.getAutores().equals(e.getAutores()) && e2.getPreco() == e.getPreco() && e2.getEditora().equals(e.getEditora()) && e2.getTamanho() == e.getTamanho();
     }
@@ -36,11 +28,40 @@ public class LivrariaVirtual {
     public int eletronicoExistente(Eletronico e) {
         for (int j = 0; j < numEletronicos; j++) {
             if (eletronicoIgual(eletronicos[j], e)) {
-                System.out.println("Livro ja existe!");
+                //System.out.println("Livro ja cadastrado!");
                 return j;
             }
         }
         return -1;
+    }
+
+    public boolean impressoIgual(Impresso i, Impresso i2) {
+        return i2.getTitulo().equals(i.getTitulo()) && i2.getAutores().equals(i.getAutores()) && i2.getPreco() == i.getPreco() && i2.getEditora().equals(i.getEditora()) && i2.getFrete() == i.getFrete();
+    }
+
+    public int impressoExistente(Impresso i) {
+        for (int j = 0; j < numImpressos; j++) {
+            if (impressoIgual(impressos[j], i)) {
+                //System.out.println("Livro ja cadastrado!");
+                return j;
+            }
+        }
+        return -1;
+    }
+
+    public boolean addImpresso(Impresso i) {
+        int ie = impressoExistente(i);
+        if (ie != -1){ // verifica se o impresso ja existe
+            impressos[ie].setEstoque(impressos[ie].getEstoque() + 1); //aumenta o estoque desse livro
+            return true; // retorna true se o impresso ja existe, não adicionando um novo
+        }
+        if (numImpressos < MAX_IMPRESSOS) {
+            i.aumentarEstoque();
+            impressos[numImpressos] = i;
+            numImpressos++;
+            return true;
+        }
+        return false;
     }
 
     public boolean addEletronico(Eletronico e) {
@@ -57,7 +78,7 @@ public class LivrariaVirtual {
     public boolean addAmbos(Impresso i, Eletronico e) {
         if (numImpressos < MAX_IMPRESSOS && numEletronicos < MAX_ELETRONICOS) {
             addEletronico(e);
-            //addImpresso(i);
+            addImpresso(i);
             return true;
         }
         return false;
@@ -72,51 +93,201 @@ public class LivrariaVirtual {
         return false;
     }
 
-    public void cadastrarLivro(Scanner sc){
-        int tipo = 0;
-        while (tipo != 1 && tipo != 2 && tipo != 3) { 
-            System.out.println("Digite o tipo de livro que deseja cadastrar:");
-            System.out.println("1. Impresso");
-            System.out.println("2. Eletrônico");
-            System.out.println("3. Ambos");
-            System.out.print("\n-> ");
-            tipo = sc.nextInt();
-            sc.nextLine();
-            System.out.println("Digite o titulo do livro: ");
-            //colocar verificação se livro existe nos livros cadastrados
-            String titulo = sc.nextLine();
-            System.out.println("Digite o(s) autor(es) do livro: ");
-            String autor = sc.nextLine();
-            System.out.println("Digite a editora do livro: ");
-            String editora = sc.nextLine();
-            System.out.println("Digite o preço do livro: ");
-            float preco = sc.nextFloat();
-            sc.nextLine();
-            
-            if (tipo == 1) {
-                System.out.println("Digite o frete cobrado para entrega do livro:");
-                float frete = sc.nextFloat();
-                //addImpresso(new Impresso(titulo, autor, editora, preco, frete));
-            } else if (tipo == 2) {
-                System.out.println("Digite o tamanho do arquivo (em KB):");
-                int tamanho = sc.nextInt();
-                addEletronico(new Eletronico(titulo, autor, editora, preco, tamanho));
-            } else if (tipo == 3) {
-                System.out.println("Digite o frete cobrado para entrega do livro:");
-                float frete = sc.nextFloat();
-                System.out.println("Digite o tamanho do arquivo (em KB):");
-                int tamanho = sc.nextInt();
-                System.out.println(tipo);
-                //addImpresso(new Impresso(titulo, autor, editora, preco, frete));
-                addEletronico(new Eletronico(titulo, autor, editora, preco, tamanho));
-            } else {
-                System.out.println("Opcão inválida. Tente novamente.\n");
+    public int impressosEmEstoque(){
+        int total = 0;
+        for (Impresso i : impressos) {
+            if (i != null) {
+                total += i.getEstoque();
             }
         }
+        return total;
+    }
+
+    public void cadastrarLivro(Scanner sc){
+        sc = new Scanner(System.in);
+        int tipo = 0;
+        while (tipo != 1 && tipo != 2 && tipo != 3) {
+            try {
+                System.out.println("\nDigite o tipo de livro que deseja cadastrar:");
+                System.out.println("1. Impresso");
+                System.out.println("2. Eletrônico");
+                System.out.println("3. Ambos");
+                System.out.print("\n-> ");
+                tipo = sc.nextInt();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Tente novamente.");
+                sc.nextLine();
+            }
+            if (tipo == 1 && numImpressos == MAX_IMPRESSOS) {
+                System.out.println("Limite de livros impressos atingido. Impossível adicionar mais livros.");
+                return;
+            } else if (tipo == 2 && numEletronicos == MAX_ELETRONICOS) {
+                System.out.println("Limite de livros eletronicos atingido. Impossível adicionar mais livros.");
+                return;
+            } else if (tipo == 3 &&numImpressos == MAX_IMPRESSOS && numEletronicos == MAX_ELETRONICOS){
+                System.out.println("Limite de livros impressos e eletronicos atingido. Impossível adicionar mais livros.");
+                return;
+            } else if (tipo == 3 && numImpressos == MAX_IMPRESSOS){
+                System.out.println("Limite de livros impressos atingido. Impossível adicionar mais livros.");
+                return;
+            } else if (tipo == 3 && numEletronicos == MAX_ELETRONICOS){
+                System.out.println("Limite de livros eletronicos atingido. Impossível adicionar mais livros.");
+                return;
+            }
+        }
+
+        String titulo, autor, editora;
+        float preco;
+        sc = new Scanner(System.in);
+        while (true){
+            try {
+                System.out.println("\nDigite o titulo do livro: ");
+                titulo = sc.nextLine();
+                System.out.println("\nDigite o(s) autor(es) do livro: ");
+                autor = sc.nextLine();
+                System.out.println("\nDigite a editora do livro: ");
+                editora = sc.nextLine();
+                System.out.println("\nDigite o preço do livro: ");
+                preco = sc.nextFloat();
+                sc.nextLine();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Tente novamente.");
+            }
+        }
+        
+        float frete;
+        int tamanho;
+        sc = new Scanner(System.in);
+        while (true){
+            try {
+                if (tipo == 1) {
+                    System.out.println("\nDigite o frete cobrado para entrega do livro:");
+                    frete = sc.nextFloat();
+                    addImpresso(new Impresso(titulo, autor, editora, preco, frete));
+                    break;
+                } else if (tipo == 2) {
+                    System.out.println("\nDigite o tamanho do arquivo (em KB):");
+                    tamanho = sc.nextInt();
+                    addEletronico(new Eletronico(titulo, autor, editora, preco, tamanho));
+                    break;
+                } else if (tipo == 3) {
+                    System.out.println("\nDigite o frete cobrado para entrega do livro:");
+                    frete = sc.nextFloat();
+                    System.out.println("\nDigite o tamanho do arquivo (em KB):");
+                    tamanho = sc.nextInt();
+                    System.out.println(tipo);
+                    addImpresso(new Impresso(titulo, autor, editora, preco, frete));
+                    addEletronico(new Eletronico(titulo, autor, editora, preco, tamanho));
+                    break;
+                } else {
+                    System.out.println("Opcão inválida. Tente novamente.\n");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Tente novamente.");
+            }
+        }
+        
+        
+    }
+
+    public float calcularValorTotal(Livro[] livros){
+        float total = 0;
+        for (Livro l : livros){
+            if (l != null){
+                total += l.getPreco();
+                if (l instanceof Impresso)
+                    total += ((Impresso) l).getFrete();
+            }
+        }
+        return total;
+    }
+
+    public void realizarVenda(Scanner sc){
+        sc = new Scanner(System.in);
+        if (numVendas == MAX_VENDAS){
+            System.out.println("Limite de vendas atingido. Impossível realizar mais vendas.");
+            return;
+        }
+        if (impressosEmEstoque() + this.numEletronicos == 0){
+            System.out.println("\nNenhum livro no estoque e/ou cadastrado. Impossível realizar vendas.\n");
+            return;
+        }
+        System.out.println("\nDigite o nome do cliente: ");
+        String nomeCliente = sc.nextLine();
+        int numLivros;
+        while (true) { 
+            System.out.println("\nDigite a quantidade de livros: ");
+            numLivros = sc.nextInt();
+            if (numLivros <= 0)
+                System.out.println("Quantidade de livros inválida. Tente novamente.\n");
+            else if (numLivros > impressosEmEstoque() + this.numEletronicos)
+                System.out.println("Não há essa quantidade de livros no estoque. Tente novamente.\n");
+            else
+                break;
+        }
+        Venda v = new Venda();
+        int indexAtual = 0;
+        for (int i = 0; i < numLivros; i++){
+            System.out.println("\nDigite o tipo de livro:");
+            System.out.println("1. Impresso");
+            System.out.println("2. Eletrônico");
+            System.out.print("\n-> ");
+            int tipo = 0;
+            while (tipo != 1 && tipo != 2) {
+                tipo = sc.nextInt();
+                if (tipo != 1 && tipo != 2)
+                    System.out.println("Opcão inválida. Tente novamente.\n");
+            }
+            if (tipo == 1 && numImpressos == 0) {
+                System.out.println("Nenhum livro impresso cadastrado.");
+                break;
+            }
+            else if (tipo == 2 && numEletronicos == 0) {
+                System.out.println("Nenhum livro eletrônico cadastrado.");
+                break;
+            } else if (tipo == 1 && impressosEmEstoque() == 0) {
+                System.out.println("Nenhum livro em estoque.");
+                break;
+            }
+            if (tipo == 1){
+                listarLivrosImpressos();
+            } else if (tipo == 2) {
+                listarLivrosEletronicos();
+            }
+            int indice = 0;
+            while (true) {
+                System.out.println("Qual livro gostaria de comprar?");
+                System.out.print("-> ");
+                indice = sc.nextInt();
+                try {
+                    if (tipo == 1 && impressos[indice - 1].getEstoque() == 0)
+                        System.out.println("Livro fora de estoque. Tente novamente.\n");
+                    else
+                        break;
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println("Opcão inválida. Tente novamente.\n");
+                }
+            }
+            v.setCliente(nomeCliente);
+            if (tipo == 1){
+                v.addLivro(impressos[indice - 1], indexAtual);
+                impressos[indice - 1].diminuirEstoque();
+            } else if (tipo == 2) {
+                v.addLivro(impressos[indice - 1], indexAtual);
+            }
+            indexAtual++;
+        }
+        addVenda(v);
+        
     }
 
     public void listarLivrosEletronicos(){
-        System.out.println("\nLIVROS ELETRÕNICOS CADASTRADOS:\n");
+        System.out.println("\nLIVROS ELETRÔNICOS CADASTRADOS:\n");
+        if (numEletronicos == 0) {
+            System.out.println("\tNenhum livro eletrônico cadastrado.\n");
+        }
         for (int i = 0; i < numEletronicos; i++) {
             System.out.println((i + 1) + ". {");
             System.out.println(eletronicos[i]);
@@ -124,8 +295,16 @@ public class LivrariaVirtual {
         }
     }
 
-    public void listarLivrosImpressos(){
-
+    public void listarLivrosImpressos(){    
+        System.out.println("\nLIVROS IMPRESSOS CADASTRADOS:\n");
+        if (numImpressos == 0) {
+            System.out.println("\tNenhum livro impresso cadastrado.\n");
+        }
+        for (int i = 0; i < numImpressos; i++) {
+            System.out.println((i + 1) + ". {");
+            System.out.println(impressos[i]);
+            System.out.println("}\n");
+        }
     }
 
     public void listarLivros(){
@@ -134,7 +313,15 @@ public class LivrariaVirtual {
     }
 
     public void listarVendas(){
-
+        System.out.println("\nVENDAS CADASTRADAS:\n");
+        if (numVendas == 0) {
+            System.out.println("\tNenhuma venda cadastrada.\n");
+        }
+        for (int i = 0; i < numVendas; i++) {
+            System.out.println((i + 1) + ". {");
+            System.out.println(vendas[i]);
+            System.out.println("}\n");
+        }
     }
 
     public int getMAX_IMPRESSOS() {
@@ -197,12 +384,45 @@ public class LivrariaVirtual {
         this.numVendas = numVendas;
     }
 
+    public static void limparScanner(Scanner sc) {
+        if (sc.hasNextLine()){
+            sc.nextLine();
+        }
+    }
+
     public static void main(String[] args) {
         LivrariaVirtual livraria = new LivrariaVirtual();
         Scanner sc = new Scanner(System.in);
-        livraria.cadastrarLivro(sc);
-        livraria.cadastrarLivro(sc);
-        livraria.listarLivrosEletronicos();
+        int op = 0;
+        while (true) {
+            try {
+                System.out.println("Livraria Virtual:\n");
+                System.out.println("\t1. Cadastrar livros");
+                System.out.println("\t2. Realizar uma venda");
+                System.out.println("\t3. Listar livros");
+                System.out.println("\t4. Listar vendas");
+                System.out.println("\t5. Sair");
+                System.out.print("\n-> ");
+                op = sc.nextInt();
+                sc.nextLine();
+                if (op == 1) {
+                    livraria.cadastrarLivro(sc);
+                } else if (op == 2) {
+                    livraria.realizarVenda(sc);
+                } else if (op == 3) {
+                    livraria.listarLivros();
+                } else if (op == 4) {
+                    livraria.listarVendas();
+                } else if (op == 5) {
+                    break;
+                } else {
+                    System.out.println("Opcão inválida. Tente novamente.\n");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Tente novamente.\n");
+                sc.nextLine();
+            }
+        }
         sc.close();
     }
 }

@@ -78,7 +78,7 @@ public abstract class Livro {
             autores = "\tAutores: " + getAutores() + "\n";
         }
 
-        String preco = "\tR$" + String.valueOf(getPreco());
+        String preco = "R$" + String.valueOf(getPreco());
 
         //Caso o preço não tenha sido informado
         if(getPreco() < 0){
