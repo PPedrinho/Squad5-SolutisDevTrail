@@ -2,9 +2,9 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class LivrariaVirtual {
-    private final int MAX_IMPRESSOS = 2;
-    private final int MAX_ELETRONICOS = 2;
-    private final int MAX_VENDAS = 10;
+    private final int MAX_IMPRESSOS = 20;
+    private final int MAX_ELETRONICOS = 20;
+    private final int MAX_VENDAS = 40;
     private Impresso[] impressos;
     private Eletronico[] eletronicos;
     private Venda[] vendas;
