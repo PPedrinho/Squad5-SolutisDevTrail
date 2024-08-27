@@ -3,7 +3,7 @@
 - Breno Canguçu (Classe Livro)
 - Gleice Branti de Souza (Classe Eletronico)
 - Ighor Guedes Farias (Classe Impresso)
-- Pedro Lima Almeida Santos (Class Venda)
+- Pedro Lima Almeida Santos (Classe Venda)
 - Yan Campêlo das Chagas (Classe LivrariaVirtual e criação e integração com o banco de dados)
 
 ## Instruções:
