@@ -9,6 +9,7 @@
 ## Instruções:
 1. Para que o banco de dados funcione é necessário:
   - Ter instalado o MySQL
+  - Criar o banco chamado **livrariavirtualsquad5**
   - Altere os campos de usuário e senha dentro do arquivo persistence.xml de acordo com seus dados do MySQL
   - Ter instalado todas as dependências relacionadas ao Hibernate
 2. Principais funções:
