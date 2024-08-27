@@ -1,7 +1,7 @@
 # DESAFIO LIVRARIA VIRTUAL
 ## Squad 5:
-- Breno Canguçu
-- Gleice Branti de Souza
+- Breno Canguçu (Classe Livro)
+- Gleice Branti de Souza (Classe Eletronico)
 - Ighor Guedes Farias (Classe Impresso)
 - Pedro Lima Almeida Santos (Class Venda)
 - Yan Campêlo das Chagas (Classe LivrariaVirtual e criação e integração com o banco de dados)
