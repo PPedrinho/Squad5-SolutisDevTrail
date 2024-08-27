@@ -1,25 +1,38 @@
+import javax.persistence.*;
 
+@Entity
 public class Venda {
-    private Livro[] livros;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "venda_livro", joinColumns = @JoinColumn(name = "venda_id"), inverseJoinColumns = @JoinColumn(name = "livro_id"))
+    @OrderColumn
+    private Livro[] livros = new Livro[0];
+
     private static int numVendas = 0;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name = "numero", nullable = false, unique = false)
     private int numero;
+
+    @Column(name = "cliente", nullable = false, unique = false)
     private String cliente;
+
+    @Column(name = "valor")
     private float valor;
 
     //construtoress
-    public Venda() {    
-        this.numero = ++numVendas;
+
+    public Venda() {
         this.valor = 0f;
-        this.livros = new Livro[0];
     }
 
     public Venda(String cliente, Livro[] livros, float valor) {
-        this.numero = ++numVendas;
         this.cliente = cliente;
         this.valor = valor;
-        this.livros = new Livro[0];
     }
-    
 
     //metodos
     public void addLivro(Livro l, int index) {
@@ -82,12 +95,10 @@ public class Venda {
         String stringLivros = "";
 
         for (Livro livro : livros) {
-            stringLivros += "\n\t\t" + livro.getTitulo();
+            stringLivros += "\n\t\t- " + livro.getTitulo() + " por " + livro.getAutores();
         }
         return "\tLivros:" + stringLivros + "\n\tNúmero=" + numero + "\n\tCliente=" + cliente + "\n\tValor: R$"
                 + valor;
     }
-
-    
 
 }

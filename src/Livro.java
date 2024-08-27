@@ -1,7 +1,22 @@
+import javax.persistence.*;
+
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Livro {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name = "titulo", nullable = false, unique = false)
     private String titulo;
+
+    @Column(name = "autores", nullable = false, unique = false)
     private String autores;
+
+    @Column(name = "editora", nullable = false, unique = false)
     private String editora;
+
+    @Column(name = "preco", nullable = false, unique = false)
     private float preco;
 
     //construtores

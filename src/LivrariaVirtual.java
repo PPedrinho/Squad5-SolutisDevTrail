@@ -1,4 +1,5 @@
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class LivrariaVirtual {
@@ -11,6 +12,7 @@ public class LivrariaVirtual {
     private int numImpressos;
     private int numEletronicos;
     private int numVendas;
+    private RepositorioLivraria repo = new RepositorioLivraria();
 
     public LivrariaVirtual() {
         this.impressos = new Impresso[MAX_IMPRESSOS];
@@ -35,13 +37,14 @@ public class LivrariaVirtual {
         return -1;
     }
 
-    public boolean impressoIgual(Impresso i, Impresso i2) {
+    public static boolean impressoIgual(Impresso i, Impresso i2) {
         return i2.getTitulo().equals(i.getTitulo()) && i2.getAutores().equals(i.getAutores()) && i2.getPreco() == i.getPreco() && i2.getEditora().equals(i.getEditora()) && i2.getFrete() == i.getFrete();
     }
 
     public int impressoExistente(Impresso i) {
-        for (int j = 0; j < numImpressos; j++) {
-            if (impressoIgual(impressos[j], i)) {
+        List<Impresso> impressosB = repo.pegarLivrosImpressos();
+        for (int j = 0; j < impressosB.size(); j++) {
+            if (impressoIgual(impressosB.get(j), i)) {
                 //System.out.println("Livro ja cadastrado!");
                 return j;
             }
@@ -52,13 +55,16 @@ public class LivrariaVirtual {
     public boolean addImpresso(Impresso i) {
         int ie = impressoExistente(i);
         if (ie != -1){ // verifica se o impresso ja existe
-            impressos[ie].setEstoque(impressos[ie].getEstoque() + 1); //aumenta o estoque desse livro
+            repo.aumentarEstoqueImpresso(i);
+            //impressos[ie].setEstoque(impressos[ie].getEstoque() + 1); //aumenta o estoque desse livro
+            System.out.println("\nLivro já cadastrado. Aumentando o estoque.\n");
             return true; // retorna true se o impresso ja existe, não adicionando um novo
         }
-        if (numImpressos < MAX_IMPRESSOS) {
+        else if (numImpressos < MAX_IMPRESSOS) {
             i.aumentarEstoque();
             impressos[numImpressos] = i;
             numImpressos++;
+            repo.cadastrar(i);
             return true;
         }
         return false;
@@ -70,6 +76,7 @@ public class LivrariaVirtual {
         if (numEletronicos < MAX_ELETRONICOS) {
             eletronicos[numEletronicos] = e;
             numEletronicos++;
+            repo.cadastrar(e);
             return true;
         }
         return false;
@@ -88,16 +95,20 @@ public class LivrariaVirtual {
         if (numVendas < MAX_VENDAS) {
             vendas[numVendas] = v;
             numVendas++;
+            repo.cadastrar(v);
             return true;
         }
         return false;
     }
 
     public int impressosEmEstoque(){
+        List<Impresso> imp = repo.pegarLivrosImpressos();
         int total = 0;
-        for (Impresso i : impressos) {
-            if (i != null) {
-                total += i.getEstoque();
+        if (!imp.isEmpty()){
+            for (Impresso i : imp) {
+                if (i != null) {
+                    total += i.getEstoque();
+                }
             }
         }
         return total;
@@ -158,7 +169,6 @@ public class LivrariaVirtual {
                 editora = sc.nextLine();
                 System.out.println("\nDigite o preço do livro: ");
                 preco = sc.nextFloat();
-                sc.nextLine();
                 break;
             } catch (InputMismatchException e) {
                 limparConsole();
@@ -169,7 +179,7 @@ public class LivrariaVirtual {
         
         float frete;
         int tamanho;
-        sc = new Scanner(System.in);
+        limparScanner(sc);
         while (true){
             try {
                 if (tipo == 1) {
@@ -189,7 +199,6 @@ public class LivrariaVirtual {
                     frete = sc.nextFloat();
                     System.out.println("\nDigite o tamanho do arquivo (em KB):");
                     tamanho = sc.nextInt();
-                    System.out.println(tipo);
                     addImpresso(new Impresso(titulo, autor, editora, preco, frete));
                     addEletronico(new Eletronico(titulo, autor, editora, preco, tamanho));
                     limparConsole();
@@ -221,12 +230,12 @@ public class LivrariaVirtual {
 
     public void realizarVenda(Scanner sc){
         sc = new Scanner(System.in);
-        if (numVendas == MAX_VENDAS){
+        if (repo.pegarVendas().size() == MAX_VENDAS){
             limparConsole();
             System.out.println("Limite de vendas atingido. Impossível realizar mais vendas.");
             return;
         }
-        if (impressosEmEstoque() + this.numEletronicos == 0){
+        if (impressosEmEstoque() + repo.pegarLivrosEletronicos().size() == 0){
             limparConsole();
             System.out.println("\nNenhum livro no estoque e/ou cadastrado. Impossível realizar vendas.\n");
             return;
@@ -240,8 +249,8 @@ public class LivrariaVirtual {
             numLivros = sc.nextInt();
             if (numLivros <= 0)
                 System.out.println("Quantidade de livros inválida. Tente novamente.\n");
-            else if (numLivros > impressosEmEstoque() + this.numEletronicos)
-                System.out.println("Não há essa quantidade de livros no estoque. Tente novamente.\n");
+            else if (numLivros > impressosEmEstoque() && repo.pegarLivrosEletronicos().isEmpty())
+                System.out.println("Não há essa quantidade de livros no estoque nem livros eletrônicos cadastrados. Tente novamente.\n");
             else
                 break;
         }
@@ -261,16 +270,16 @@ public class LivrariaVirtual {
                     System.out.println("Opcão inválida. Tente novamente.\n");
                 }
             }
-            if (tipo == 1 && numImpressos == 0) {
+            if (tipo == 1 && repo.pegarLivrosImpressos().isEmpty()) {
                 System.out.println("Nenhum livro impresso cadastrado.");
-                break;
+                return;
             }
-            else if (tipo == 2 && numEletronicos == 0) {
+            else if (tipo == 2 && repo.pegarLivrosEletronicos().isEmpty()) {
                 System.out.println("Nenhum livro eletrônico cadastrado.");
-                break;
+                return;
             } else if (tipo == 1 && impressosEmEstoque() == 0) {
                 System.out.println("Nenhum livro em estoque.");
-                break;
+                return;
             }
             limparConsole();
             if (tipo == 1){
@@ -279,12 +288,14 @@ public class LivrariaVirtual {
                 listarLivrosEletronicos();
             }
             int indice = 0;
+            List<Impresso> impressosB = repo.pegarLivrosImpressos();
+            List<Eletronico> eletronicosB = repo.pegarLivrosEletronicos();
             while (true) {
                 System.out.println("Qual livro gostaria de comprar?");
                 System.out.print("-> ");
                 indice = sc.nextInt();
                 try {
-                    if (tipo == 1 && impressos[indice - 1].getEstoque() == 0){
+                    if (tipo == 1 && impressosB.get(indice - 1).getEstoque() == 0){
                         limparConsole();
                         System.out.println("Livro fora de estoque. Tente novamente.\n");
                     } else
@@ -297,38 +308,41 @@ public class LivrariaVirtual {
             }
             v.setCliente(nomeCliente);
             if (tipo == 1){
-                v.addLivro(impressos[indice - 1], indexAtual);
-                impressos[indice - 1].diminuirEstoque();
+                v.addLivro(impressosB.get(indice - 1), indexAtual);
+                impressosB.get(indice - 1).diminuirEstoque();
             } else if (tipo == 2) {
-                v.addLivro(impressos[indice - 1], indexAtual);
+                v.addLivro(eletronicosB.get(indice - 1), indexAtual);
             }
             indexAtual++;
         }
+        v.setNumero(repo.pegarVendas().size());
         addVenda(v);
         limparConsole();
         System.out.println("Venda realizada com sucesso!\n");
     }
 
     public void listarLivrosEletronicos(){
+        List<Eletronico> eletronicosBanco = repo.pegarLivrosEletronicos();
         System.out.println("\nLIVROS ELETRÔNICOS CADASTRADOS:\n");
-        if (numEletronicos == 0) {
+        if (eletronicosBanco.isEmpty()) {
             System.out.println("\tNenhum livro eletrônico cadastrado.\n");
         }
-        for (int i = 0; i < numEletronicos; i++) {
+        for (int i = 0; i < eletronicosBanco.size(); i++) {
             System.out.println((i + 1) + ". {");
-            System.out.println(eletronicos[i]);
+            System.out.println(eletronicosBanco.get(i));
             System.out.println("}\n");
         }
     }
 
-    public void listarLivrosImpressos(){    
+    public void listarLivrosImpressos(){
+        List<Impresso> impressosBanco = repo.pegarLivrosImpressos();
         System.out.println("\nLIVROS IMPRESSOS CADASTRADOS:\n");
-        if (numImpressos == 0) {
+        if (impressosBanco.isEmpty()) {
             System.out.println("\tNenhum livro impresso cadastrado.\n");
         }
-        for (int i = 0; i < numImpressos; i++) {
+        for (int i = 0; i < impressosBanco.size(); i++) {
             System.out.println((i + 1) + ". {");
-            System.out.println(impressos[i]);
+            System.out.println(impressosBanco.get(i));
             System.out.println("}\n");
         }
     }
@@ -340,14 +354,15 @@ public class LivrariaVirtual {
     }
 
     public void listarVendas(){
+        List<Venda> vendasBanco = repo.pegarVendas();
         limparConsole();
         System.out.println("\nVENDAS CADASTRADAS:\n");
-        if (numVendas == 0) {
+        if (vendasBanco.isEmpty()) {
             System.out.println("\tNenhuma venda cadastrada.\n");
         }
-        for (int i = 0; i < numVendas; i++) {
+        for (int i = 0; i < vendasBanco.size(); i++) {
             System.out.println((i + 1) + ". {");
-            System.out.println(vendas[i]);
+            System.out.println(vendasBanco.get(i));
             System.out.println("}\n");
         }
     }
@@ -447,6 +462,7 @@ public class LivrariaVirtual {
                 } else if (op == 4) {
                     livraria.listarVendas();
                 } else if (op == 5) {
+                    livraria.repo.fecharConexao();
                     break;
                 } else {
                     limparConsole();

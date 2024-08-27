@@ -1,5 +1,17 @@
+import javax.persistence.*;
+
+@Entity
 public class Eletronico extends Livro {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name = "tamanho", nullable = false, length = 45, unique = false)
     private int tamanho;
+
+    public Eletronico(){
+
+    }
 
     public Eletronico(String titulo, String autores, String editora, float preco, int tamanho) {
         super(titulo, autores, editora, preco);
