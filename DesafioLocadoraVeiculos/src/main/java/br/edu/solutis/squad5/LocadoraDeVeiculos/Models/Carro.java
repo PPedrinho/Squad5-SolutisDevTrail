@@ -1,4 +1,4 @@
-
+package br.edu.solutis.squad5.LocadoraDeVeiculos.Models;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
