@@ -1,4 +1,4 @@
-package br.edu.solutis.squad5.LocadoraDeVeiculos.model;
+package br.edu.solutis.squad5.LocadoraDeVeiculos.Models;
 
 import java.util.Date;
 
