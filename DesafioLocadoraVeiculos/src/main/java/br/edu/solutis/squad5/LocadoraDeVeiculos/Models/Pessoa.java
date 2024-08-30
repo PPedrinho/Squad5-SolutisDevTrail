@@ -68,6 +68,11 @@ public class Pessoa {
     public void setSexo(Sexo sexo) {
         this.sexo = sexo;
     }
+
+    public void setId(int id2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setId'");
+    }
     
     
 } 

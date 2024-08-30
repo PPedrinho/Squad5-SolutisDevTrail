@@ -86,5 +86,17 @@ public class Carro {
     public void setModeloCarro(ModeloCarro modeloCarro) {
         this.modeloCarro = modeloCarro;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setAcessorios(List<Acessorio> acessorios) {
+        this.acessorios = acessorios;
+    }
     
 }
