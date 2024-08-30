@@ -1,5 +1,10 @@
 package br.edu.solutis.squad5.LocadoraDeVeiculos.Models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "CATEGORIAS")
 public enum Categoria {
     HATCH_COMPACTO,
     HATCH_MEDIO,

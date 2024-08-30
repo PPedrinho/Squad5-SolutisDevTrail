@@ -2,6 +2,8 @@ package br.edu.solutis.squad5.LocadoraDeVeiculos.Models;
 
 import java.util.Date;
 
+@Entity
+@Table(name = "PESSOAS")
 public class Pessoa {
     private String nome;
     private Date dataNascimento;
