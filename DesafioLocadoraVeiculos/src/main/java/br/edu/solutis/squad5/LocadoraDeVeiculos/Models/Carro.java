@@ -3,12 +3,41 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "CARROS")
 public class Carro {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name = "placa", nullable = false, unique = true)
     private String placa;
+
+    @Column(name = "chassi", nullable = false, unique = true)
     private String chassi;
+
+    @Column(name = "cor", nullable = false, unique = false)
     private String cor;
+
+    @Column(name = "valor_diaria", nullable = false, unique = false)
     private BigDecimal valorDiaria;
+
+    @JoinColumn(name = "MODELO_CARRO_ID")
+    @ManyToOne
     private ModeloCarro modeloCarro;
+
+    @JoinColumn(name = "ACESSORIOS_ID")
+    @ManyToOne
     private List<Acessorio> acessorios = new ArrayList<>();
     //colocar alugueis
 
