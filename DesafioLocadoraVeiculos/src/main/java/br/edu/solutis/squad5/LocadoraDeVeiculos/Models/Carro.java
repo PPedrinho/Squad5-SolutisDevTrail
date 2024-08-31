@@ -9,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -36,10 +38,9 @@ public class Carro {
     @ManyToOne
     private ModeloCarro modeloCarro;
 
-    @JoinColumn(name = "ACESSORIOS_ID")
-    @ManyToOne
+    @ManyToMany
+    @JoinTable(name = "CARROS_ACESSORIOS")
     private List<Acessorio> acessorios = new ArrayList<>();
-    //colocar alugueis
 
     public Carro(String placa, String chassi, String cor, BigDecimal valorDiaria, ModeloCarro modeloCarro) {
         this.placa = placa;

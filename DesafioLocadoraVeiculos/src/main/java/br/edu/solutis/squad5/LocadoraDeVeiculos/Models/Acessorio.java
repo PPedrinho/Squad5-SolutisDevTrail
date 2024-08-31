@@ -9,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -23,8 +25,8 @@ public class Acessorio {
     @Column(name = "descricao", nullable = false, unique = false)
     private String descricao;
 
-    @JoinColumn(name = "CARROS_ID")
-    @ManyToOne
+    @ManyToMany
+    @JoinTable(name = "CARROS_ACESSORIOS")
     private List<Carro> carros = new ArrayList<>();
 
     public Acessorio(String descricao) {

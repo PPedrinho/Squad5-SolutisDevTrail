@@ -1,6 +1,9 @@
 package br.edu.solutis.squad5.LocadoraDeVeiculos.Models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,4 +17,12 @@ public enum Categoria {
     MINIVAN,
     ESPORTIVO,
     UTILITARIO_COMERCIAL;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    public int getId() {
+        return id;
+    }
 }

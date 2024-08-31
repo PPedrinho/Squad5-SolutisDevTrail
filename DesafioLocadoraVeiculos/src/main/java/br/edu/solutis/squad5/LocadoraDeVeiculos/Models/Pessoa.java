@@ -30,6 +30,17 @@ public class Pessoa {
     @Column(name = "sexo", nullable = false, unique = false)
     private Sexo sexo;
 
+    public Pessoa() {
+    }
+
+    public Pessoa(int id, String nome, Date dataNascimento, String cpf, Sexo sexo) {
+        this.id = id;
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.cpf = cpf;
+        this.sexo = sexo;
+    }
+
     public Pessoa(String nome, Date dataNascimento, String cpf, Sexo sexo) {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
@@ -68,11 +79,10 @@ public class Pessoa {
     public void setSexo(Sexo sexo) {
         this.sexo = sexo;
     }
-
-    public void setId(int id2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setId'");
+    
+    @Override
+    public String toString() {
+        return "Pessoa [cpf=" + cpf + ", dataNascimento=" + dataNascimento + ", id=" + id + ", nome=" + nome
+                + ", sexo=" + sexo + "]";
     }
-    
-    
 } 
