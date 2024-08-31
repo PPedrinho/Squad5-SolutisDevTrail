@@ -30,7 +30,7 @@ public class PessoaController {
     private PessoaRepository pessoaRepo;
 
     @GetMapping()
-    private ResponseEntity<List<Pessoa>> buscarPessoas() {
+    private ResponseEntity<List<Pessoa>> buscarTodasPessoas() {
         try {
             List<Pessoa> pessoas = pessoaRepo.findAll();
             if (pessoas.isEmpty())
@@ -56,7 +56,7 @@ public class PessoaController {
     @PostMapping
     private ResponseEntity<Pessoa> criarPessoa(@RequestBody Pessoa pessoa) {
         try {
-            System.out.println(pessoa);
+            //System.out.println(pessoa);
             pessoaRepo.save(pessoa);
             return ResponseEntity.ok(pessoa);
         } catch (OptimisticLockingFailureException olfe){
