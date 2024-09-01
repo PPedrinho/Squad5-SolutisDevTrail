@@ -1,5 +1,11 @@
-import jakarta.persistence.*;
+package br.edu.solutis.squad5.LocadoraDeVeiculos.Models;
 import java.math.BigDecimal;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class ApoliceSeguro {
