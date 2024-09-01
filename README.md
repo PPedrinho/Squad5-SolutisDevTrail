@@ -10,7 +10,7 @@ Repositório destinado para as listas e desafios do Squad5 - Etapa Solutis Schoo
 
 ## Atribuições de cada membro
 
-Classes:
+Classes:\
 Breno - Classes Motorista e Funcionário\
 Gleice - Classes Carro e Acessório\
 Ighor - Classes Aluguel e ApoliceDeSeguro\
