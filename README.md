@@ -19,4 +19,4 @@ Yan - Classes Categoria, ModeloCarro e Fabricante.\
 \
 Pedro saiu no meio do processo seletivo. Suas Classes foram realizadas por Yan.\
 \
-Os respectivos controllers e repositórios foram ajustados por Yan.\
+Os respectivos controllers e repositórios foram ajustados por Yan.
