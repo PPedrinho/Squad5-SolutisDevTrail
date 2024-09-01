@@ -8,7 +8,7 @@ Repositório destinado para as listas e desafios do Squad5 - Etapa Solutis Schoo
 - Pedro Lima Almeida Santos 
 - Yan Campêlo das Chagas 
 
-## Atribuições de cada membro
+## Locadora de veículos: atribuições de cada membro
 
 Classes:\
 Breno - Classes Motorista e Funcionário\
