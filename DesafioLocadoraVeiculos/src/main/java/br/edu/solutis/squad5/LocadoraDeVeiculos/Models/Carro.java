@@ -42,6 +42,11 @@ public class Carro {
     @JoinTable(name = "CARROS_ACESSORIOS")
     private List<Acessorio> acessorios = new ArrayList<>();
 
+    
+
+    public Carro() {
+    }
+
     public Carro(String placa, String chassi, String cor, BigDecimal valorDiaria, ModeloCarro modeloCarro) {
         this.placa = placa;
         this.chassi = chassi;

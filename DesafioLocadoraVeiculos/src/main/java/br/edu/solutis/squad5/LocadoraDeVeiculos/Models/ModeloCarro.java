@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,6 +24,12 @@ public class ModeloCarro {
 
     @Column(name = "categoria", nullable = false, unique = false)
     private Categoria categoria;
+
+    @JoinColumn(name = "fabricante_id")
+    @ManyToOne
+    private Fabricante fabricante;
+
+    public ModeloCarro() {}
 
     public ModeloCarro(String descricao, Fabricante fabricante, Categoria categoria) {
         this.descricao = descricao;

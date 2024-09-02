@@ -5,10 +5,9 @@ import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 
 @Entity 
 @DiscriminatorValue(value = "F")
@@ -20,6 +19,8 @@ public class Funcionario extends Pessoa {
 
     @Column(name = "matricula", nullable = true, unique = true)
     private String matricula;
+
+    public Funcionario() {}
 
     public Funcionario(String nome, Date dataNascimento, String cpf, Sexo sexo, String matricula) {
         super(nome, dataNascimento, cpf, sexo);

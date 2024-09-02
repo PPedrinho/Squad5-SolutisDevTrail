@@ -70,6 +70,7 @@ public class CarroController {
             carroRepository.deleteById(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
             return ResponseEntity.status(500).build();
         }
     }
